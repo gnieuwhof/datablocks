@@ -10,3 +10,6 @@
 [submodule "soapcore"]
 	path = soapcore
 	url = https://github.com/gnieuwhof/soapcore.git
+[submodule "sygnis"]
+	path = sygnis
+	url = https://github.com/gnieuwhof/sygnis.git
