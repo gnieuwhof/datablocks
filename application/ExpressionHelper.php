@@ -17,7 +17,7 @@ class ExpressionHelper
     
     public static function Validate( $expression, $fieldEnum )
     {
-        if( !isset( $expression->Op ) )
+        if( !isset( $expression->Op ) || ( $expression->Op == Operator::None ) )
             throw new SoapException( 'Op must be set.' );
         
         if( $expression->Op == Operator::_True )
@@ -47,7 +47,7 @@ class ExpressionHelper
         }
         
         // Validate compare operators.
-        if( !isset( $expression->Field ) )
+        if( !isset( $expression->Field ) || ( $expression->Field == 'None' ) )
             throw new SoapException( 'Field must be set if Op is a compare operator.' );
 
         $reflection = new ReflectionClass( $fieldEnum );
@@ -73,26 +73,37 @@ class ExpressionHelper
             // Done.
             return;
         }
-        
-        if( !isset( $expression->Values->object ) &&
-            !isset( $expression->SelectExpression )
-            )
+
+        if( isset( $expression->Values->object ) )
+        {
+            if( is_array( $expression->Values->object ) )
+            {
+                if( in_array( '', $expression->Values->object, true ) )
+                    throw new SoapException( 'The In operator does not handle empty strings, use OR (field = "").' );
+                else if( in_array( null, $expression->Values->object, true ) )
+                    throw new SoapException( 'The In operator does not handle null values, use OR (field = null).' );
+            }
+        }
+        else if( isset( $expression->SelectExpression ) )
+        {
+            $selectExpression = $expression->SelectExpression->enc_value;
+
+            if( !isset( $selectExpression->SelectField ) || ( $selectExpression->SelectField == 'None' ) )
+                throw new SoapException( 'No inner select field set.' );
+            
+            if( !in_array( $selectExpression->SelectField, $fields ) )
+                throw new SoapException( 'SelectField must have one of the following values: ' . implode( ', ', $fields ) . '.' );
+
+            self::Validate( $selectExpression, $fieldEnum );
+        }
+        else
         {
             throw new SoapException( 'If Op has value In, either Values or SelectExpression must be set.' );
         }
-
-        if( isset( $expression->Values->object ) &&
-            is_array( $expression->Values->object )
-            )
-        {
-            if( in_array( '', $expression->Values->object, true ) )
-                throw new SoapException( 'The In operator does not handle empty strings, use OR (field = "").' );
-            else if( in_array( null, $expression->Values->object, true ) )
-                throw new SoapException( 'The In operator does not handle null values, use OR (field = null).' );
-        }
     }
     
-    public static function Convert( $expression, $columnNames, S\IQueryBuilder $queryBuilder )
+    public static function Convert(
+        $expression, $columnNames, S\IQueryBuilder $queryBuilder )
     {
         if( ( $expression->Op == Operator::_And ) ||
             ( $expression->Op == Operator::_Or )
@@ -126,30 +137,27 @@ class ExpressionHelper
          */
         $columnName = $columnNames[ $expression->Field ];
         
+        if( isset( $expression->SelectExpression ) )
+        {
+            $className = $expression->SelectExpression->enc_stype;
+
+            $class = new ReflectionClass( $className );                
+            $tableName = $class->getStaticPropertyValue( 'tableName' );
+
+            $selectExpression = $expression->SelectExpression->enc_value;
+
+            $innerColumnName = $columnNames[ $selectExpression->SelectField ];
+
+            $clause = self::Convert(
+                $selectExpression, $columnNames, $queryBuilder );
+
+            return new S\WhereInnerSelect( $tableName, $columnName,
+                $expression->Op, $innerColumnName, $clause);
+        }
+        
         if( $expression->Op == Operator::In )
         {
-            if( isset( $expression->SelectExpression ) )
-            {
-                $className = $expression->SelectExpression->enc_stype;
-
-                $class = new ReflectionClass( $className );                
-                $tableName = $class->getStaticPropertyValue( 'tableName' );
-                
-                
-                $selectExpression = $expression->SelectExpression->enc_value;
-
-                $innerColumnName = $columnNames[ $selectExpression->SelectField ];
-
-                $clause = self::Convert(
-                    $selectExpression, $columnNames, $queryBuilder );
-                
-                return new S\WhereInnerSelect( $tableName, $columnName,
-                    Operator::In, $innerColumnName, $clause);
-            }
-            else
-            {
-                $values = $expression->Values->object;
-            }
+            $values = $expression->Values->object;
             
             if( !is_array( $values ) )
             {
