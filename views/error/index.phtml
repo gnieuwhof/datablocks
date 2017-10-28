@@ -1,0 +1,58 @@
+<?php
+
+/**
+ * @file
+ * @brief This file contains the default error view.
+ */
+
+?>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>
+      <?php echo $this->DataCollection[ 'message' ]; ?>
+
+    </title>
+  </head>
+
+  <body>
+    <span>
+      <h1>
+        Server Error
+        <hr />
+      </h1>
+
+      <h2>
+        <i><?php echo $this->DataCollection[ 'message' ]; ?></i>
+      </h2>
+    </span>
+
+    <b> Status code: </b>
+    <?php echo
+        $_SERVER[ 'SERVER_PROTOCOL' ] , ' ' , $this->StatusCode , ' ' , 
+        HttpStatusCode::GetDescription( $this->StatusCode );
+    ?>
+    
+    <br>
+    <br>
+
+    <b> Description: </b>
+    <?php echo $this->DataCollection[ 'description' ]; ?>
+    
+    <br>
+    <br>
+
+    <b> Requested URL: </b>
+    <?php echo $_SERVER[ 'REQUEST_URI' ]; ?>
+        
+    <br>
+    <br>
+
+    <hr />
+
+    <b>Version Information: </b>
+    MVC Framework Version:
+    <?php echo $this->DataCollection[ 'version' ]; ?>
+
+  </body>
+</html>

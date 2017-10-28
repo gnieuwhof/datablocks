@@ -1,0 +1,11 @@
+
+# NetBeans
+/nbproject/private/
+
+# Doxygen
+/doc/
+
+/DefaultMapping.php
+/definitions.wsdl.php
+/SoapWrapper.php
+/filecache.php
