@@ -120,8 +120,6 @@ class Database
     
     private static function ExceptionHandler( PDOException $exception )
     {
-        Rendall::Log( $exception );
-        
         //SQLSTATE[42S02]: Base table or view not found: 1146 Table 'classicmodels.customers3' doesn't exist.
         throw new SoapException( 'Resource error occurred.' );
     }

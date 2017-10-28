@@ -1,0 +1,12 @@
+[submodule "static"]
+	path = static
+	url = https://github.com/gnieuwhof/static.git
+[submodule "exceptions"]
+	path = exceptions
+	url = https://github.com/gnieuwhof/exceptions.git
+[submodule "mvc"]
+	path = mvc
+	url = https://github.com/gnieuwhof/mvc.git
+[submodule "soapcore"]
+	path = soapcore
+	url = https://github.com/gnieuwhof/soapcore.git
