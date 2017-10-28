@@ -138,7 +138,7 @@ class ExpressionHelper
                 
                 $selectExpression = $expression->SelectExpression->enc_value;
 
-                $innerColumnName = $selectExpression->SelectField;
+                $innerColumnName = $columnNames[ $selectExpression->SelectField ];
 
                 $clause = self::Convert(
                     $selectExpression, $columnNames, $queryBuilder );
@@ -159,8 +159,8 @@ class ExpressionHelper
             return new S\WhereIn( $columnName, $values );
         }
         
-        $value = $expression->Value;
-
+        $value = ( isset( $expression->Value ) ? $expression->Value : null );
+        
         switch( $expression->Op )
         {                
             case Operator::Equals:
