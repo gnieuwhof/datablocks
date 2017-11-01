@@ -118,6 +118,22 @@ class Database
         }
     }
     
+    public function Count( $tableName, $where )
+    {
+        try
+        {
+            return S\DB::CountRows(
+                $this->dbmsAdapter,
+                $tableName,
+                $where
+                );
+        }
+        catch( PDOException $exception )
+        {
+            self::ExceptionHandler( $exception );
+        }
+    }
+    
     private static function ExceptionHandler( PDOException $exception )
     {
         //SQLSTATE[42S02]: Base table or view not found: 1146 Table 'classicmodels.customers3' doesn't exist.
