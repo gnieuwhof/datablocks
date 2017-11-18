@@ -5,3 +5,4 @@
 !ExpressionBase.php
 !ExpressionHelper.php
 !Operator.php
+!WhereQueryResult.php

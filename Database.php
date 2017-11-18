@@ -134,11 +134,10 @@ class Database
         }
     }
     
-    public function WhereQuery( $where )
+    public function WhereQuery( $where, array &$whereValues )
     {
         $queryBuilder = $this->GetQueryBuilder();
         
-        $whereValues = array();
         $whereClause = $where->ToString( $queryBuilder, /*ref*/ $whereValues );
         
         return $whereClause;
