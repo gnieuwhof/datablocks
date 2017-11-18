@@ -134,6 +134,16 @@ class Database
         }
     }
     
+    public function WhereQuery( $where )
+    {
+        $queryBuilder = $this->GetQueryBuilder();
+        
+        $whereValues = array();
+        $whereClause = $where->ToString( $queryBuilder, /*ref*/ $whereValues );
+        
+        return $whereClause;
+    }
+    
     private static function ExceptionHandler( PDOException $exception )
     {
         //SQLSTATE[42S02]: Base table or view not found: 1146 Table 'classicmodels.customers3' doesn't exist.
