@@ -6,3 +6,4 @@
 !ExpressionHelper.php
 !Operator.php
 !WhereQueryResult.php
+!Timestamp.php

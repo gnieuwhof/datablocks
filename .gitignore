@@ -9,3 +9,4 @@
 /definitions.wsdl.php
 /SoapWrapper.php
 /filecache.php
+/AuthAccess.php
