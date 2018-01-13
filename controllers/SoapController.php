@@ -41,7 +41,7 @@ class SoapController extends ControllerBase
         }
         
         $server = new SoapServer(
-            Config::WSDL_FILE,
+            'definitions.wsdl.php',
             $options
             );
 

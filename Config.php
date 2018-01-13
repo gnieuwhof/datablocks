@@ -32,24 +32,12 @@ class Config
      * Just don't use spaces to be sure.
      */
     const SERVICE_NAME = 'DataBlocks';
-
-    /**
-     * @var string Name of the WSDL file
-     * (can be left as is).
-     */
-    const WSDL_FILE = 'definitions.wsdl.php';
-
+    
     /**
      * @var string URL of the WebService.
      */
     const SERVICE_LOCATION = 'http://127.0.0.1/datablocks/example/';
-
-    /**
-     * @var string Name of the wrapper class
-     * (can be left as is).
-     */
-    const SOAP_WRAPPER_CLASS_NAME = 'SoapWrapper';
-
+    
     /**
      * @var string Location of the SOAP classes
      * (can be left as is).
