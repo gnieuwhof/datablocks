@@ -60,7 +60,7 @@ class Database
         }
     }
     
-    public function SelectWhere( $tableName, $columnNames, $where )
+    public function SelectWhere( $tableName, $columnNames, $where, $distinct = false )
     {
         try
         {
@@ -68,7 +68,8 @@ class Database
                 $this->dbmsAdapter,
                 $columnNames,
                 $tableName,
-                $where
+                $where,
+                $distinct
                 );
         }
         catch( PDOException $exception )
